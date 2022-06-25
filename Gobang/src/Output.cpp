@@ -11,12 +11,25 @@ namespace err
 		std::cout << "[Error] ";
 		Log::ModifyColorOfMessage(0);
 	}
-	
 	void FailureToInitializeGame()
 	{
 		err::Error();
 		Log::ModifyColorOfMessage(1);
 		std::cout << "Failure to initialize the game" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void InputWrongMode()
+	{
+		err::Error();
+		Log::ModifyColorOfMessage(1);
+		std::cout << "Input the wrong mode" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void OutOfRange()
+	{
+		err::Error();
+		Log::ModifyColorOfMessage(1);
+		std::cout << "Out of range" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
 }
@@ -29,7 +42,6 @@ namespace Log
 		std::cout << "Select game mode (PvE->0 PvP->1): ";
 		Log::ModifyColorOfMessage(0);
 	}
-
 	void ModifyColorOfMessage(const int& color)
 	{
 		switch (color)
@@ -81,6 +93,30 @@ namespace Log
 			}
 
 		}
+	}
+	void PlayerFirst()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Player First" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void ComputerFirst()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Computer first" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void PlayerOneFirst()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Player1 first" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void PlayerTwoFirst()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Player2 first" << std::endl;
+		Log::ModifyColorOfMessage(0);
 	}
 }
 
