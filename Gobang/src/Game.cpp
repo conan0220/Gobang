@@ -25,7 +25,7 @@ void Game::Loop()
 {
 	// Output the original checkerboard
 	GenerateOutput();
-	ShutdownSystem();
+
 	while (true)
 	{
 		ProcessInput();
