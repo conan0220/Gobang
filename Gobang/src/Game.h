@@ -26,6 +26,8 @@ private:
 	void SelectGameMode();
 	// Select who first
 	void SelectWhoFirst();
+	// Who's turn
+	void PrintWhosTurn();
 
 	// Deal with the input event
 	void ProcessInput();
@@ -33,10 +35,16 @@ private:
 	void UpdateGame();
 	// Display output on the screen
 	void GenerateOutput();
+	// Input chess position
+	void PlayerInputChessPosition();
+	// Convert position to real dgital position
+	void ConvertPosToDigitalPos();
 	// Play again or not
 	bool PlayAgainOrNot();
 	// Initialize Player1 Player2 or Player Computer when press play again
 	void InitializeObjects();
+	
+
 
 	// Establish CheckerBoard object
 	ChessBoard chess_board;
@@ -47,6 +55,10 @@ private:
 	Player p1;
 	Player p2;
 
+	// Input which column
+	char ch_x;		
+	// Input which row
+	char ch_y;		
 	// Game mode PvE is 0 PvP is 1
 	int GameMode;
 	// Game end or not

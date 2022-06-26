@@ -30,10 +30,28 @@ void ChessBoard::InitializeData()
 
 void ChessBoard::PrintOnScreen()
 {
+	char row = 97;		// row name
+	char column = 97;	// column name
 	char temp = 0;
+
+	Log::ModifyColorOfMessage(3);
+	std::cout << " ";
 	for (int i = 0; i < width; i++)
 	{
-		for (int j = 0; j < height; j++)
+		std::cout << " " << column ;
+		column++;
+	}
+	Log::ModifyColorOfMessage(0);
+
+	std::cout << std::endl;
+	for (int i = 0; i < height; i++)
+	{
+		Log::ModifyColorOfMessage(3);
+		std::cout << row << " ";
+		row++;
+		Log::ModifyColorOfMessage(0);
+
+		for (int j = 0; j < width; j++)
 		{
 			switch (self[i][j])
 			{

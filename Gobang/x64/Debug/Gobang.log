@@ -1,3 +1,6 @@
-﻿  Game.cpp
+﻿  ChessBoard.cpp
+  Game.cpp
 D:\git-repos\Gobang\Gobang\src\Math.h(7,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Main.cpp
+  Generating Code...
   Gobang.vcxproj -> D:\git-repos\Gobang\x64\Debug\Gobang.exe

@@ -94,28 +94,34 @@ namespace Log
 
 		}
 	}
-	void PlayerFirst()
+	void PlayerTurn()
 	{
 		Log::ModifyColorOfMessage(5);
-		std::cout << "Player First" << std::endl;
+		std::cout << "Player's turn" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
-	void ComputerFirst()
+	void ComputerTurn()
 	{
 		Log::ModifyColorOfMessage(5);
-		std::cout << "Computer first" << std::endl;
+		std::cout << "Computer's turn" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
-	void PlayerOneFirst()
+	void PlayerOneTurn()
 	{
 		Log::ModifyColorOfMessage(5);
-		std::cout << "Player1 first" << std::endl;
+		std::cout << "Player1's turn" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
-	void PlayerTwoFirst()
+	void PlayerTwoTurn()
 	{
 		Log::ModifyColorOfMessage(5);
-		std::cout << "Player2 first" << std::endl;
+		std::cout << "Player2's turn" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void InputChessPosition()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Input Chess Position(x, y):" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
 }
