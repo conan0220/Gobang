@@ -26,8 +26,7 @@ private:
 	void SelectGameMode();
 	// Select who first
 	void SelectWhoFirst();
-	// Who's turn
-	void PrintWhosTurn();
+	
 
 	// Deal with the input event
 	void ProcessInput();
@@ -35,15 +34,10 @@ private:
 	void UpdateGame();
 	// Display output on the screen
 	void GenerateOutput();
-	// Input chess position
-	void PlayerInputChessPosition();
-	// Convert position to real dgital position
-	void ConvertPosToDigitalPos();
-	// Play again or not
-	bool PlayAgainOrNot();
-	// Initialize Player1 Player2 or Player Computer when press play again
-	void InitializeObjects();
-	
+	// Is someone win or not
+	bool GameEndOrNot();
+	// Is chess connected in a line
+	bool IsItConnectedInLine(const ChessBoard& chess_board, const int& turn);
 
 
 	// Establish CheckerBoard object
@@ -55,15 +49,11 @@ private:
 	Player p1;
 	Player p2;
 
-	// Input which column
-	char ch_x;		
-	// Input which row
-	char ch_y;		
 	// Game mode PvE is 0 PvP is 1
 	int GameMode;
 	// Game end or not
 	bool is_game_end;
-	// who's turn
+	// who's turn | player, player1 -> -1 | computer, player2 -> 1
 	int turn;
 	// Which round 
 	int round;

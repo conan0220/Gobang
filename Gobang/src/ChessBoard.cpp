@@ -23,15 +23,15 @@ void ChessBoard::InitializeData()
 	{
 		for (int j = 0; j < height; j++)
 		{
-			self[i][j] = -1;
+			self[i][j] = 0;
 		}
 	}
 }
 
-void ChessBoard::PrintOnScreen()
+void ChessBoard::Render()
 {
-	char row = 97;		// row name
-	char column = 97;	// column name
+	char row = 97;		// row name | 97 is ascii code
+	char column = 97;	// column name | 97 is ascii code
 	char temp = 0;
 
 	Log::ModifyColorOfMessage(3);
@@ -55,12 +55,12 @@ void ChessBoard::PrintOnScreen()
 		{
 			switch (self[i][j])
 			{
-				case -1:
+				case 0:
 				{
 					temp = '.';
 					break;
 				}	
-				case 0:
+				case -1:
 				{
 					temp = 'o';
 					Log::ModifyColorOfMessage(2);
@@ -85,4 +85,22 @@ void ChessBoard::PrintOnScreen()
 		std::cout << std::endl;
 	}
 	Log::ModifyColorOfMessage(0);
+}
+
+void ChessBoard::Update(const int& turn)
+{
+	// Update chessboard 
+	self[position.y][position.x] = turn;
+}
+
+void ChessBoard::GetInfoSelf()
+{
+	for (int i = 0; i < height; i++)
+	{
+		for (int j = 0; j < width; j++)
+		{
+			std::cout << self[i][j] << " ";
+		}
+		std::cout << std::endl;
+	}
 }

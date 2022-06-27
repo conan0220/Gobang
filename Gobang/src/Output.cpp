@@ -2,6 +2,7 @@
 #include <Windows.h>
 
 #include "Output.h"
+#include "Game.h"
 
 namespace err 
 {
@@ -30,6 +31,13 @@ namespace err
 		err::Error();
 		Log::ModifyColorOfMessage(1);
 		std::cout << "Out of range" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void FailureToInput()
+	{
+		err::Error();
+		Log::ModifyColorOfMessage(1);
+		std::cout << "Failure to input" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
 }
@@ -122,6 +130,77 @@ namespace Log
 	{
 		Log::ModifyColorOfMessage(5);
 		std::cout << "Input Chess Position(x, y):" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void WhosTurn(const int& GameMode, const int& turn)
+	{
+		if (GameMode == 0)
+		{
+			switch (turn)
+			{
+				case -1:
+				{
+					Log::PlayerTurn();
+					break;
+				}
+				case 1:
+				{
+					Log::ComputerTurn();
+					break;
+				}
+				default:
+				{
+					err::OutOfRange();
+					Game::get().ShutdownSystem();
+					break;
+				}
+			}
+		}
+		else if (GameMode == 1)
+		{
+			switch (turn)
+			{
+				case -1:
+				{
+					Log::PlayerOneTurn();
+					break;
+				}
+				case 1:
+				{
+					Log::PlayerTwoTurn();
+					break;
+				}
+				default:
+				{
+					err::OutOfRange();
+					Game::get().ShutdownSystem();
+					break;
+				}
+			}
+		}
+	}
+	void PlayerOneWin()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Player1 win" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void PlayerTwoWin()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Player2 win" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void PlayerWin()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Player win" << std::endl;
+		Log::ModifyColorOfMessage(0);
+	}
+	void ComputerWin()
+	{
+		Log::ModifyColorOfMessage(5);
+		std::cout << "Computer win" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
 }

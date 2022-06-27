@@ -5,7 +5,7 @@
 #include "Math.h"
 
 Game::Game()
-	: ch_x(0), ch_y(0), GameMode(-1), is_game_end(false), turn(-1), round(0)
+	: GameMode(-1), is_game_end(false), turn(0), round(0)
 {
 }
 
@@ -23,7 +23,7 @@ bool Game::InitializeGame()
 
 void Game::Loop()
 {
-	// Output the original checkerboard
+	// Output the original chessboard
 	GenerateOutput();
 
 	while (true)
@@ -73,61 +73,18 @@ void Game::SelectGameMode()
 void Game::SelectWhoFirst()
 {
 	turn = GetRandom(0, 1);
-}
-
-void Game::PrintWhosTurn()
-{
-	if (GameMode == 0)
+	if (turn == 0)
 	{
-		switch (turn)
-		{
-		case 0:
-		{
-			Log::PlayerTurn();
-			break;
-		}
-		case 1:
-		{
-			Log::ComputerTurn();
-			break;
-		}
-		default:
-		{
-			err::OutOfRange();
-			ShutdownSystem();
-			break;
-		}
-		}
+		turn = -1;
 	}
-	else if (GameMode == 1)
-	{
-		switch (turn)
-		{
-			case 0:
-			{
-				Log::PlayerOneTurn();
-				break;
-			}
-			case 1:
-			{
-				Log::PlayerTwoTurn();
-				break;
-			}
-			default:
-			{
-				err::OutOfRange();
-				ShutdownSystem();
-				break;
-			}
-		}
-	}
+	
 }
 
 void Game::ProcessInput()
 {
-	PrintWhosTurn();
+	Log::WhosTurn(GameMode, turn);
 	
-	bool is_input_illegal = true;
+	Log::InputChessPosition();
 	switch (GameMode)
 	{
 		case 0:		// PvE input
@@ -136,16 +93,14 @@ void Game::ProcessInput()
 			break;
 		}
 		case 1:		// PvP input
-		{
-			while (is_input_illegal)
+		{	
+			if (turn == -1)			// p1 turn
 			{
-				Log::InputChessPosition();
-				PlayerInputChessPosition();
-				is_input_illegal = (97 <= ch_x && ch_x <= 111 && 97 <= ch_y && ch_y <= 111) ? false : true;
-				if (is_input_illegal)
-				{
-					err::OutOfRange();
-				}
+				p1.Input(chess_board);
+			}
+			else if (turn == 1)		// p2 turn
+			{
+				p2.Input(chess_board);
 			}
 			break;
 		}
@@ -156,21 +111,22 @@ void Game::ProcessInput()
 			break;
 		}
 	}
+
 	
-	
-	ConvertPosToDigitalPos();
 	
 }
 
 void Game::UpdateGame()
 {	
+	// Chessboard update
+	chess_board.Update(turn);
+	// Is someone win or not
+	is_game_end = GameEndOrNot();
+
 	// change turn to next one
-	turn = (turn + 1) % 2;		
+	turn *= -1;
 	// Update round
 	round++;
-	// Update chessboard 
-	chess_board.self[chess_board.position.y][chess_board.position.x] = turn;
-
 }
 
 void Game::GenerateOutput()
@@ -179,35 +135,197 @@ void Game::GenerateOutput()
 	Log::ModifyColorOfMessage(7);
 	std::cout << "Round: " << round << std::endl << std::endl;
 	Log::ModifyColorOfMessage(0);
-	chess_board.PrintOnScreen();
+	chess_board.Render();
 	std::cout << std::endl;
+	
+	if (is_game_end)
+	{
+		turn *= -1;		// 
+		switch (GameMode)
+		{
+			case 0:		// PvE mode
+			{
+				break;
+			}
+			case 1:
+			{
+				if (turn == -1)
+				{
+					Log::PlayerOneWin();
+				}
+				else if (turn == 1)
+				{
+					Log::PlayerTwoWin();
+				}
+				break;
+			}
+
+		}
+	}
 }
 
-void Game::PlayerInputChessPosition()
+bool Game::GameEndOrNot()
 {
-	Log::ModifyColorOfMessage(5);
-	std::cout << "x -> ";
-	Log::ModifyColorOfMessage(0);
-	std::cin >> ch_x;
-	Log::ModifyColorOfMessage(5);
-	std::cout << "y -> ";
-	Log::ModifyColorOfMessage(0);
-	std::cin >> ch_y;
+	if (IsItConnectedInLine(chess_board, turn))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-void Game::ConvertPosToDigitalPos()
+bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 {
-	chess_board.position.x = ch_x - 97;
-	chess_board.position.y = ch_y - 97;
-}
+	int x = chess_board.position.x;
+	int y = chess_board.position.y;
+	const int target = 5;				// the target number of chess
+	int total = 0;						// total number of a line of chess
 
-bool Game::PlayAgainOrNot()
-{
+	// vertical
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		y -= 1;
+		
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	x = chess_board.position.x;
+	y = chess_board.position.y + 1;
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		y += 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	if (total >= target)
+	{
+		return true;
+	}
+	else
+	{
+		total = 0;
+		x = chess_board.position.x;
+		y = chess_board.position.y;
+	}
+	
+	
+	// horizontal
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		x += 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	x = chess_board.position.x - 1;
+	y = chess_board.position.y;
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		x -= 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	if (total >= target)
+	{
+		return true;
+	}
+	else
+	{
+		total = 0;
+		x = chess_board.position.x;
+		y = chess_board.position.y;
+	}
+	
+
+	// slope == -1
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		x += 1;
+		y += 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	x = chess_board.position.x - 1;
+	y = chess_board.position.y - 1;
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		x -= 1;
+		y -= 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	if (total >= target)
+	{
+		return true;
+	}
+	else
+	{
+		total = 0;
+		x = chess_board.position.x;
+		y = chess_board.position.y;
+	}
+	
+	// slope == 1
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		x += 1;
+		y -= 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	x = chess_board.position.x - 1;
+	y = chess_board.position.y + 1;
+	while (chess_board.self[y][x] == turn)
+	{
+		total += 1;
+		x -= 1;
+		y += 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	if (total >= target)
+	{
+		return true;
+	}
+	else
+	{
+		total = 0;
+		x = chess_board.position.x;
+		y = chess_board.position.y;
+	}
+
 	return false;
-}
-
-void Game::InitializeObjects()
-{
 }
 
 

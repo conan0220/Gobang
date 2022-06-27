@@ -10,6 +10,8 @@ namespace err
 	void InputWrongMode();
 	// Output "Out of range"
 	void OutOfRange();
+	// Output "Failure to input"
+	void FailureToInput();
 }
 
 namespace Log
@@ -28,5 +30,15 @@ namespace Log
 	void PlayerTwoTurn();
 	// Output message of Input chess position
 	void InputChessPosition();
+	// Who's turn
+	void WhosTurn(const int& game_mode, const int& turn);
+	// Player1 win
+	void PlayerOneWin();
+	// Player2 win
+	void PlayerTwoWin();
+	// Player win
+	void PlayerWin();
+	// Computer win
+	void ComputerWin();
 	
 }

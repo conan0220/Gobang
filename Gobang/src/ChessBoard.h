@@ -11,11 +11,14 @@ public:
 	// Initialize data
 	void InitializeData();
 	// Output chessboard on the scteen
-	void PrintOnScreen();
+	void Render();
+	void Update(const int& turn);
+	// Get Info self
+	void GetInfoSelf();
 
-	// Position of Checkerboard
+	// Position of Chessboard
 	Position position;
-	// ChessBoard 
+	// ChessBoard |  player, player1 -> -1 | computer, player2 -> 1 | NULL -> 0
 	int self[15][15];
 private:
 	
