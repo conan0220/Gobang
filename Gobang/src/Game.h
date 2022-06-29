@@ -20,7 +20,10 @@ public:
 
 	static Game get();
 
-
+	// who's turn | player, player1 -> -1 | computer, player2 -> 1
+	int turn;
+	// How many chess can make a line
+	int target = 5;
 private:
 	// Select PvE->0 or PvP->1
 	void SelectGameMode();
@@ -38,13 +41,21 @@ private:
 	bool GameEndOrNot();
 	// Is chess connected in a line
 	bool IsItConnectedInLine(const ChessBoard& chess_board, const int& turn);
-
+	// Is connected in virtical
+	bool IsConnectedInVirtical(const ChessBoard& chess_board, const int& turn, const int& target);
+	// Is connected in horizontal
+	bool IsConnectedInHorizontal(const ChessBoard& chess_board, const int& turn, const int& target);
+	// Is connected in slope 1
+	bool IsConnectedInSlopeOne(const ChessBoard& chess_board, const int& turn, const int& target);
+	// Is connected in slope -1
+	bool IsConnectedInSlopeMinusOne(const ChessBoard& chess_board, const int& turn, const int& target);
 
 	// Establish CheckerBoard object
 	ChessBoard chess_board;
 	// Establish Computer and Player objects
 	Player p;
 	Computer cp;
+	Computer cp1;
 	// Establish two Player objects
 	Player p1;
 	Player p2;
@@ -53,8 +64,8 @@ private:
 	int GameMode;
 	// Game end or not
 	bool is_game_end;
-	// who's turn | player, player1 -> -1 | computer, player2 -> 1
-	int turn;
+	
 	// Which round 
 	int round;
+	
 };

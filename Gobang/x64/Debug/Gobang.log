@@ -1,3 +1,4 @@
-﻿  Game.cpp
+﻿  Computer.cpp
 D:\git-repos\Gobang\Gobang\src\Math.h(7,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+D:\git-repos\Gobang\Gobang\src\Computer.cpp(100): warning C4715: 'Computer::AI_1': not all control paths return a value
   Gobang.vcxproj -> D:\git-repos\Gobang\x64\Debug\Gobang.exe

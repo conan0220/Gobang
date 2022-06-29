@@ -1,8 +1,10 @@
 #include <iostream>
+#include <Windows.h>
 
 #include "Game.h"
 #include "Output.h"
 #include "Math.h"
+
 
 Game::Game()
 	: GameMode(-1), is_game_end(false), turn(0), round(0)
@@ -89,7 +91,15 @@ void Game::ProcessInput()
 	{
 		case 0:		// PvE input
 		{
-			// PvE input
+			if (turn == -1)
+			{
+				p.Input(chess_board);
+			}
+			else if (turn == 1)
+			{
+				cp.Input(chess_board, target, turn);
+			}
+
 			break;
 		}
 		case 1:		// PvP input
@@ -140,11 +150,19 @@ void Game::GenerateOutput()
 	
 	if (is_game_end)
 	{
-		turn *= -1;		// 
+		turn *= -1;		// reverse turn to the winner 
 		switch (GameMode)
 		{
 			case 0:		// PvE mode
 			{
+				if (turn == -1)
+				{
+					Log::PlayerWin();
+				}
+				else if (turn == 1)
+				{
+					Log::ComputerWin();
+				}
 				break;
 			}
 			case 1:
@@ -178,17 +196,40 @@ bool Game::GameEndOrNot()
 
 bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 {
+	
+
+	if (IsConnectedInVirtical(chess_board, turn, target))
+	{
+		return true;
+	}
+	else if (IsConnectedInHorizontal(chess_board, turn, target))
+	{
+		return true;
+	}
+	else if (IsConnectedInSlopeOne(chess_board, turn, target))
+	{
+		return true;
+	}
+	else if (IsConnectedInSlopeMinusOne(chess_board, turn, target))
+	{
+		return true;
+	}
+		
+	return false;
+}
+
+bool Game::IsConnectedInVirtical(const ChessBoard& chess_board, const int& turn, const int& target)
+{
 	int x = chess_board.position.x;
 	int y = chess_board.position.y;
-	const int target = 5;				// the target number of chess
 	int total = 0;						// total number of a line of chess
 
 	// vertical
-	while (chess_board.self[y][x] == turn)
+	while (chess_board.self[y][x] == turn && y >= 0)
 	{
 		total += 1;
 		y -= 1;
-		
+
 		if (total >= 5)
 		{
 			break;
@@ -196,7 +237,7 @@ bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 	}
 	x = chess_board.position.x;
 	y = chess_board.position.y + 1;
-	while (chess_board.self[y][x] == turn)
+	while (chess_board.self[y][x] == turn && y < chess_board.height)
 	{
 		total += 1;
 		y += 1;
@@ -210,16 +251,18 @@ bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 	{
 		return true;
 	}
-	else
-	{
-		total = 0;
-		x = chess_board.position.x;
-		y = chess_board.position.y;
-	}
-	
-	
+
+	return false;
+}
+
+bool Game::IsConnectedInHorizontal(const ChessBoard& chess_board, const int& turn, const int& target)
+{
+	int x = chess_board.position.x;
+	int y = chess_board.position.y;
+	int total = 0;						// total number of a line of chess
+
 	// horizontal
-	while (chess_board.self[y][x] == turn)
+	while (chess_board.self[y][x] == turn && x < chess_board.width)
 	{
 		total += 1;
 		x += 1;
@@ -231,7 +274,7 @@ bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 	}
 	x = chess_board.position.x - 1;
 	y = chess_board.position.y;
-	while (chess_board.self[y][x] == turn)
+	while (chess_board.self[y][x] == turn && x >= 0)
 	{
 		total += 1;
 		x -= 1;
@@ -245,16 +288,57 @@ bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 	{
 		return true;
 	}
-	else
+
+	return false;
+}
+
+bool Game::IsConnectedInSlopeOne(const ChessBoard& chess_board, const int& turn, const int& target)
+{
+	int x = chess_board.position.x;
+	int y = chess_board.position.y;
+	int total = 0;						// total number of a line of chess
+
+	// slope == 1
+	while (chess_board.self[y][x] == turn && x < chess_board.width && y >= 0)
 	{
-		total = 0;
-		x = chess_board.position.x;
-		y = chess_board.position.y;
+		total += 1;
+		x += 1;
+		y -= 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
 	}
-	
+	x = chess_board.position.x - 1;
+	y = chess_board.position.y + 1;
+	while (chess_board.self[y][x] == turn && x >= 0 && y < chess_board.height)
+	{
+		total += 1;
+		x -= 1;
+		y += 1;
+
+		if (total >= 5)
+		{
+			break;
+		}
+	}
+	if (total >= target)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool Game::IsConnectedInSlopeMinusOne(const ChessBoard& chess_board, const int& turn, const int& target)
+{
+	int x = chess_board.position.x;
+	int y = chess_board.position.y;
+	int total = 0;						// total number of a line of chess
 
 	// slope == -1
-	while (chess_board.self[y][x] == turn)
+	while (chess_board.self[y][x] == turn && x < chess_board.width && y < chess_board.height)
 	{
 		total += 1;
 		x += 1;
@@ -267,7 +351,7 @@ bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 	}
 	x = chess_board.position.x - 1;
 	y = chess_board.position.y - 1;
-	while (chess_board.self[y][x] == turn)
+	while (chess_board.self[y][x] == turn && x >= 0 && y >= 0)
 	{
 		total += 1;
 		x -= 1;
@@ -281,48 +365,6 @@ bool Game::IsItConnectedInLine(const ChessBoard& chess_board, const int& turn)
 	if (total >= target)
 	{
 		return true;
-	}
-	else
-	{
-		total = 0;
-		x = chess_board.position.x;
-		y = chess_board.position.y;
-	}
-	
-	// slope == 1
-	while (chess_board.self[y][x] == turn)
-	{
-		total += 1;
-		x += 1;
-		y -= 1;
-
-		if (total >= 5)
-		{
-			break;
-		}
-	}
-	x = chess_board.position.x - 1;
-	y = chess_board.position.y + 1;
-	while (chess_board.self[y][x] == turn)
-	{
-		total += 1;
-		x -= 1;
-		y += 1;
-
-		if (total >= 5)
-		{
-			break;
-		}
-	}
-	if (total >= target)
-	{
-		return true;
-	}
-	else
-	{
-		total = 0;
-		x = chess_board.position.x;
-		y = chess_board.position.y;
 	}
 
 	return false;
