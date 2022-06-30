@@ -104,7 +104,7 @@ namespace Log
 	}
 	void PlayerTurn()
 	{
-		Log::ModifyColorOfMessage(5);
+		Log::ModifyColorOfMessage(2);
 		std::cout << "Player's turn" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
@@ -116,7 +116,7 @@ namespace Log
 	}
 	void PlayerOneTurn()
 	{
-		Log::ModifyColorOfMessage(5);
+		Log::ModifyColorOfMessage(2);
 		std::cout << "Player1's turn" << std::endl;
 		Log::ModifyColorOfMessage(0);
 	}
