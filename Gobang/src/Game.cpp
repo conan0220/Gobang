@@ -47,7 +47,7 @@ void Game::ShutdownSystem()
 	exit(0);
 }
 
-Game Game::get()
+Game& Game::get()
 {
 	static Game instance;
 	return instance;

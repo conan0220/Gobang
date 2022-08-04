@@ -18,7 +18,7 @@ public:
 	// Shutdown entire game
 	void ShutdownSystem();
 
-	static Game get();
+	static Game& get();
 
 	// who's turn | player, player1 -> -1 | computer, player2 -> 1
 	int turn;
