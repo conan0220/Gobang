@@ -2,7 +2,6 @@
 #include "Game.h"
 #include "Output.h"
 
-
 int main()
 {
 	Game gobang;

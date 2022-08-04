@@ -20,11 +20,11 @@ void Computer::Input(ChessBoard& chess_board, const int& target, const int& turn
 	Log::ModifyColorOfMessage(5);
 	std::cout << "x -> ";
 	Log::ModifyColorOfMessage(0);
-	std::cout << position.x << std::endl;
+	std::cout << (char)(position.x + 97) << std::endl;
 	Log::ModifyColorOfMessage(5);
 	std::cout << "y -> ";
 	Log::ModifyColorOfMessage(0);
-	std::cout << position.y << std::endl;
+	std::cout << (char)(position.y + 97) << std::endl;
 
 	chess_board.position.x = position.x;
 	chess_board.position.y = position.y;
@@ -95,8 +95,11 @@ int Computer::AI_1(ChessBoard& chess_board, const int& target, int x, int y, int
 	}
 	
 	//std::cout << "x:" << x << " y:" <<  y << " xp:" << temp_xp << std::endl;
+	
 	// Next recursive
 	AI_1(chess_board, target, x, y, xp, turn);
+
+	return 0;
 }
 
 int Computer::XpOfVertical(const ChessBoard& chess_board, const int& x, const int& y, const int& turn)
@@ -139,7 +142,7 @@ int Computer::XpOfHorizontal(const ChessBoard& chess_board, const int& x, const 
 	int temp_y = y;
 	int xp = Game::get().target;						// total number of a line of chess
 
-	// vertical
+	// horizontal
 	temp_x += 1;
 	while (chess_board.self[temp_y][temp_x] == turn && temp_x < chess_board.width) // 1 is computer's chess symbol
 	{
@@ -173,7 +176,7 @@ int Computer::XpOfSlopeOne(const ChessBoard& chess_board, const int& x, const in
 	int temp_y = y;
 	int xp = Game::get().target;						// total number of a line of chess
 
-	// vertical
+	// slope one
 	temp_x += 1;
 	temp_y -= 1;
 	while (chess_board.self[temp_y][temp_x] == turn && temp_x < chess_board.width && temp_y >= 0) // 1 is computer's chess symbol
@@ -210,7 +213,7 @@ int Computer::XpOfSlopeMinusOne(const ChessBoard& chess_board, const int& x, con
 	int temp_y = y;
 	int xp = Game::get().target;						// total number of a line of chess
 
-	// vertical
+	// slope minus one
 	temp_x -= 1;
 	temp_y -= 1;
 	while (chess_board.self[temp_y][temp_x] == turn && temp_x >= 0 && temp_y >= 0) // 1 is computer's chess symbol
